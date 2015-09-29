@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Exploding Kittens</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="well" id="app">
+      <h1>{{title | uppercase}}</h1>
+
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Remaining Cards</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-repeat="card: cards" v-on="click: decrementCount(card)">
+            <td>{{card.title}}: {{card.description}}</td>
+            <td>{{card.count}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Vue -->
+    <script src="Vue.js"></script>
+    <!-- jQuery -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <!-- Bootstrap JavaScript -->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- Demo View Mode -->
+    <script src="app.js"></script>
+  </body>
+</html>
