@@ -94,12 +94,56 @@ var app = new Vue({
         "nopeable": true,
         "next_player_turns": 0
       }
-    ]
+    ],
+    deck: [
+      {
+        "title": "Placeholder Card",
+        "description": "This is just a placeholder",
+        "count": 0,
+        "nopeable": true,
+        "next_player_turns": 0
+      }
+    ],
+    discardPile: [],
+    player1: {
+      hand: [],
+      isAlive: false
+    },
+    player2: {
+      hand: [],
+      isAlive: false
+    },
+    player3: {
+      hand: [],
+      isAlive: false
+    },
+    player4: {
+      hand: [],
+      isAlive: false
+    },
+    player5: {
+      hand: [],
+      isAlive: false
+    }
   },
   methods: {
     decrementCount: function(card){
       if(card.count > 0)
         card.count--;
+    },
+
+    createDeck: function(){
+      var result = [];
+      app.cards.forEach(function addMultiplesOfCards(card){
+        for(i = 0; i < card.count; i++){
+          result.push(card);  
+        }
+      })
+      app.deck = result;
+    },
+
+    dealCards: function(cards, playerCount){
+      // cards.forEach(function )
     }
   }
 })

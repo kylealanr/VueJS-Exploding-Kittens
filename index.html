@@ -26,6 +26,22 @@
           </tr>
         </tbody>
       </table>
+
+      <button v-on="click: createDeck()" type="button" class="btn btn-primary">Create Deck</button>
+
+      <table class="table table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Deck</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-repeat="card: deck">
+            <td>{{card.title}}: {{card.description}}</td>
+            <td>{{card.count}}</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <!-- Vue -->
