@@ -1,0 +1,35 @@
+.table tbody tr > td.exploding {
+  background-color: #D32F2F !important;
+}
+
+.table tbody tr > td.difuse {
+  background-color: #43A047 !important;
+}
+
+.table tbody tr > td.nope {
+  background-color: #D50000 !important;
+}
+
+.table tbody tr > td.attack {
+  background-color: #FFFF00 !important;
+}
+
+.table tbody tr > td.skip {
+  background-color: #039BE5 !important;
+}
+
+.table tbody tr > td.favor {
+  background-color: #757575 !important;
+}
+
+.table tbody tr > td.shuffle {
+  background-color: #795548 !important;
+}
+
+.table tbody tr > td.future {
+  background-color: #E91E63 !important;
+}
+
+.table tbody tr > td.cat {
+  background-color: #CFD8DC !important;
+}

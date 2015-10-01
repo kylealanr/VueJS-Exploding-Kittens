@@ -8,26 +8,39 @@
 
     <!-- Bootstrap CSS -->
     <link href="bower_components/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="style.css" rel="stylesheet">
   </head>
   <body>
     <div class="well" id="app">
       <h1>{{title | uppercase}}</h1>
 
+      <div class="alert {{error.class}}" v-repeat="error: errors">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        <strong>{{error.title}}</strong> {{error.body}}
+      </div>
+
+      <div class="input-group">
+        <span class="input-group-btn">
+          <button v-on="click: createDeck()" type="button" class="btn btn-primary">Create Deck</button>
+          <button v-on="click: dealCards(numberOfPlayers)" type="button" class="btn btn-primary">Deal Cards</button>
+        </span>
+        <input type="text" v-model="numberOfPlayers" placeholder="number of players" class="form-control">
+      </div>
+
       <table class="table table-hover table-striped">
         <thead>
           <tr>
-            <th>Remaining Cards</th>
+            <th>Players</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-repeat="card: cards" v-on="click: decrementCount(card)">
-            <td>{{card.title}}: {{card.description}}</td>
-            <td>{{card.count}}</td>
+          <tr v-repeat="player: players | filterBy true in 'isAlive'" v-on="click: killPlayer(player)">
+            <td>{{player.name}}</td>
+            <td v-repeat="card: player.hand" class="{{card.class}}">{{card.title}}</td>
           </tr>
         </tbody>
       </table>
-
-      <button v-on="click: createDeck()" type="button" class="btn btn-primary">Create Deck</button>
 
       <table class="table table-hover table-striped">
         <thead>
@@ -36,9 +49,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-repeat="card: deck">
-            <td>{{card.title}}: {{card.description}}</td>
-            <td>{{card.count}}</td>
+          <tr v-repeat="card: deck" v-on="click: decrementCount(card)" class="{{card.class}}">
+            <td>{{card.id}}</td>
+            <td class="{{card.class}}">{{card.title}}: {{card.description}}</td>
           </tr>
         </tbody>
       </table>
@@ -46,6 +59,8 @@
 
     <!-- Vue -->
     <script src="Vue.js"></script>
+    <!-- Underscore -->
+    <script src="underscore.js"></script>
     <!-- jQuery -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <!-- Bootstrap JavaScript -->

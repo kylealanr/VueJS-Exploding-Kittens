@@ -871,7 +871,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	   * @type {Boolean}
 	   */
 
-	  debug: false,
+	  debug: true,
 
 	  /**
 	   * Strict mode.
