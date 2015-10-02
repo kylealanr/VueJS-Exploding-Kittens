@@ -1,3 +1,7 @@
+.table tbody tr > td.selected {
+  border: 5px solid #000000 !important;
+}
+
 .table tbody tr > td.exploding {
   background-color: #D32F2F !important;
 }
