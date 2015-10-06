@@ -153,7 +153,7 @@ deck.normalCards = [
 	},
 	// see the futures
 	{
-		"title": "See the Furure",
+		"title": "See the Future",
 		"description": "Look at the top 3 cards in the draw pile",
 		"nopeable": true,
 		"next_player_turns": 0,
@@ -161,7 +161,7 @@ deck.normalCards = [
 		"isSelected": false
 	},
 	{
-		"title": "See the Furure",
+		"title": "See the Future",
 		"description": "Look at the top 3 cards in the draw pile",
 		"nopeable": true,
 		"next_player_turns": 0,
@@ -169,7 +169,7 @@ deck.normalCards = [
 		"isSelected": false
 	},
 	{
-		"title": "See the Furure",
+		"title": "See the Future",
 		"description": "Look at the top 3 cards in the draw pile",
 		"nopeable": true,
 		"next_player_turns": 0,
@@ -177,7 +177,7 @@ deck.normalCards = [
 		"isSelected": false
 	},
 	{
-		"title": "See the Furure",
+		"title": "See the Future",
 		"description": "Look at the top 3 cards in the draw pile",
 		"nopeable": true,
 		"next_player_turns": 0,

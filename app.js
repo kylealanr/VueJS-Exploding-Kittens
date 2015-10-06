@@ -73,7 +73,25 @@ var kittenVm = new Vue({
 
       kittenVm.players[kittenVm.currentPlayer].hand.push(drawnCard);
 
-      kittenVm.currentPlayer++;
+      // if(kittenVm.currentPlayer == kittenVm.numberOfPlayers - 1){
+      //   kittenVm.currentPlayer = 0;
+      // } else {
+      //   kittenVm.currentPlayer++;
+      // }
+
+      if(kittenVm.currentPlayer == (kittenVm.players.length - 1)){
+        kittenVm.currentPlayer = 0;
+      } else {
+        kittenVm.currentPlayer++;
+      }
+
+      while(kittenVm.players[kittenVm.currentPlayer].isAlive == false){
+        if(kittenVm.currentPlayer == (kittenVm.players.length - 1)){
+          kittenVm.currentPlayer = 0;
+        } else {
+          kittenVm.currentPlayer++;
+        }
+      }
     },
 
     killPlayer: function killPlayer(player){ 
@@ -92,7 +110,7 @@ var kittenVm = new Vue({
     },
 
     removeAlert: function removeAlert(alert){
-      kittenVm.alerts = _.without(kittenVm.alerts, alert);
+      kittenVm.alerts.splice(kittenVm.alerts.indexOf(alert), 1);
     },
 
     selectCard: function selectCard(player, card){
@@ -109,9 +127,11 @@ var kittenVm = new Vue({
         } 
       });
 
-      game.gameState.lastPlayedCards = selection;
+      game.state.lastPlayedCards = selection;
 
-      if(game.isValidMove()){
+      var response = game.logic.isValidMove();
+
+      if(response.success){
         kittenVm.discard = selection.concat(kittenVm.discard);
         kittenVm.players[kittenVm.currentPlayer].hand = _.difference(kittenVm.players[kittenVm.currentPlayer].hand, selection);  
 
@@ -121,12 +141,15 @@ var kittenVm = new Vue({
           kittenVm.currentPlayer++;
         }
       } else {
-        kittenVm.alerts.push(
-          {
+        alert = {
             "title": "Invalid move", 
-            "body": "",
+            "body": response.message,
             "class": "alert-danger"
-          });
+        };
+
+        kittenVm.alerts.push(alert);
+
+        setTimeout(function(){ kittenVm.removeAlert(alert); }, 3000);
       }
     }
   }
