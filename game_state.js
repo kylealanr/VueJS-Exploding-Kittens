@@ -5,8 +5,8 @@ game.state = (function(global){
 		// Public Properties
 		players: [],
 		currentPlayer: -1,
+		deck: [],
 		discardPile: [],
-		lastPlayedCards: [],
 		alerts: []
 	};
 
