@@ -1,3 +1,5 @@
+"use strict";
+
 var game = game || {};
 
 game.state = (function(global){

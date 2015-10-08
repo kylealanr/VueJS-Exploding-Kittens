@@ -1,3 +1,5 @@
+"use strict";
+
 var deck = deck || {};
 
 deck.bombs = [

@@ -1,3 +1,5 @@
+"use strict";
+
 var kittenVm = new Vue({
     el: '#kittenVm',
     data: {
@@ -41,7 +43,7 @@ var kittenVm = new Vue({
 
             game.state.players = [];
 
-            for (i = 0; i < playerCount; i++) {
+            for (var i = 0; i < playerCount; i++) {
                 var hand = [];
 
                 hand.push(kittenVm.difuses.pop());
@@ -142,7 +144,7 @@ var kittenVm = new Vue({
                     kittenVm.currentPlayer++;
                 }
             } else {
-                alert = {
+                var alert = {
                     "title": "Invalid move",
                     "body": response.message,
                     "class": "alert-danger"
