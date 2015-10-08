@@ -3,6 +3,7 @@
 var game = game || {};
 
 game.state = (function(global){
+
 	var factory = {
 		// Public Properties
 		players: [],
@@ -13,4 +14,5 @@ game.state = (function(global){
 	};
 
 	return factory;
+
 })(window);

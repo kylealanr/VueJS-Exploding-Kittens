@@ -2,18 +2,35 @@
 
 var game = game || {};
 
-game.ValidationResponse = function ValidationResponse(success, message) {
-    this.success = success;
-    this.message = message;
-};
+game.Responses = (function(global){
 
-game.PlayerTurnResponse = function PlayerTurnResponse(playerIndex, numberOfTurns) {
-    this.playerIndex = playerIndex;
-    this.numberOfTurns = numberOfTurns;
-};
+    var factory = {
 
-game.AlertResponse = function AlertResponse(title, body, css){
-    this.title = title;
-    this.body = body;
-    this.css = css;
-};
+        // constants
+
+        // public functions
+        ValidationRespnse: ValidationResponse,
+        PlayerTurnResponse: PlayerTurnResponse,
+        AlertResponse: AlertResponse
+    };
+
+    return factory;
+
+    function ValidationResponse(success, message) {
+        this.success = success;
+        this.message = message;
+    }
+
+    function PlayerTurnResponse(playerIndex, numberOfTurns, functionToCall) {
+        this.playerIndex = playerIndex;
+        this.numberOfTurns = numberOfTurns;
+        this.functionToCall = functionToCall;
+    }
+
+    function AlertResponse(title, body, css){
+        this.title = title;
+        this.body = body;
+        this.css = css;
+    }
+
+})(window);

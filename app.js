@@ -16,16 +16,13 @@ var kittenVm = new Vue({
         numberOfPlayers: "",
         alerts: []
     },
-    computed: {
-        playersAlive: function playersAlive() {
-            return _.where(kittenVm.players, {isAlive: true});
-        }
-    },
     methods: {
         createDeck: function createDeck() {
-            kittenVm.deck = _.shuffle(deck.normalCards);
-            kittenVm.difuses = deck.difuses.slice();
-            kittenVm.bombs = deck.bombs.slice();
+            var normalCards = deck.normalCards.createCards()
+
+            kittenVm.deck = _.shuffle(normalCards);
+            kittenVm.difuses = deck.difuses.createCards();
+            kittenVm.bombs = deck.bombs.createCards();
         },
 
         dealCards: function dealCards(playerCount) {
@@ -75,12 +72,6 @@ var kittenVm = new Vue({
             }
 
             kittenVm.players[kittenVm.currentPlayer].hand.push(drawnCard);
-
-            // if(kittenVm.currentPlayer == kittenVm.numberOfPlayers - 1){
-            //   kittenVm.currentPlayer = 0;
-            // } else {
-            //   kittenVm.currentPlayer++;
-            // }
 
             if (kittenVm.currentPlayer == (kittenVm.players.length - 1)) {
                 kittenVm.currentPlayer = 0;
