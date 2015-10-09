@@ -38,7 +38,7 @@ deck.normalCards = (function(global){
             "class": "skip",
             "isSelected": false,
             "instances": 4,
-            "function": null
+            "function": skip
         },
         {
             "title": "Favor",
@@ -58,7 +58,7 @@ deck.normalCards = (function(global){
             "class": "shuffle",
             "isSelected": false,
             "instances": 4,
-            "function": null
+            "function": shuffle
         },
         {
             "title": "See the Future",
@@ -67,8 +67,8 @@ deck.normalCards = (function(global){
             "next_player_turns": 0,
             "class": "future",
             "isSelected": false,
-            "instances": 4,
-            "function": null
+            "instances": 5,
+            "function": seeTheFuture
         },
         {
             "title": "Taco Cat",
@@ -145,6 +145,24 @@ deck.normalCards = (function(global){
         });
 
         return result;
+    }
+
+    function seeTheFuture(){
+        // todo push this onto something bound to a modal
+
+        return game.state.deck.slice(0, 3);
+    }
+
+    function shuffle(){
+        game.state.deck = _.shuffle(game.state.deck);
+
+        kittenVm.alertWithTimeout(new game.Responses.AlertResponse("Shuffled!", "", "alert-info"));
+    }
+
+    function skip(){
+        game.logic.getNextLivingPlayer();
+        kittenVm.alertWithTimeout(new game.Responses.AlertResponse("Skipped!", "", "alert-info"));
+        kittenVm.refresh();
     }
 
 })(window);

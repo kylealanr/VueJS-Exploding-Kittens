@@ -16,7 +16,7 @@ deck.difuses = (function (global) {
             "next_player_turns": 1,
             "class": "difuse",
             "isSelected": false,
-            "instances": 4,
+            "instances": 6,
             "function": null
         };
 

@@ -40,19 +40,32 @@ deck.bombs = (function(global){
         return result;
     }
 
-    function explosion(){
-        var difuses = _.where(currentPlayer.hand, { title: "Difuse"});
+    function explosion(player){
+        var difuses = _.where(player.hand, { title: "Difuse"});
 
         if(difuses.length == 0)
         {
-            game.state.currentPlayer.isAlive = false;
+            player.isAlive = false;
+
+            game.logic.getNextLivingPlayer();
         }
         else
         {
             var difuse = difuses[0];
+            var temp = [];
 
-            game.state.discardPile = difuse.concat(game.state.discardPile);
-            currentPlayer.hand.splice(indexOf(difuse), 1);
+            temp.push(difuse);
+
+            game.state.discardPile = temp.concat(game.state.discardPile);
+            player.hand.splice(player.hand.indexOf(difuse), 1);
+
+            game.state.deck.push(this);
+
+            game.state.deck = _.shuffle(game.state.deck);
+
+            game.logic.getNextLivingPlayer();
         }
+
+        kittenVm.refresh();
     }
 })(window);

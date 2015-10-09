@@ -17,58 +17,28 @@ var kittenVm = new Vue({
         alerts: []
     },
     methods: {
-        createDeck: function createDeck() {
-            var normalCards = deck.normalCards.createCards()
-
-            kittenVm.deck = _.shuffle(normalCards);
-            kittenVm.difuses = deck.difuses.createCards();
-            kittenVm.bombs = deck.bombs.createCards();
+        refresh: function refresh(){
+            kittenVm.discard = game.state.discardPile;
+            kittenVm.players = game.state.players;
+            kittenVm.currentPlayer = game.state.currentPlayer;
+            kittenVm.alerts = game.state.alerts;
+            kittenVm.checkWinCondition();
         },
 
         dealCards: function dealCards(playerCount) {
-            kittenVm.createDeck();
-
-            if (playerCount < 2 || playerCount > 5) {
-                kittenVm.alerts.push(
-                    {
-                        title: "Invalid Player Count",
-                        body: "Player count must be between 2 and 5",
-                        "class": "alert-danger"
-                    });
-                return null;
-            }
-
-            game.state.players = [];
-
-            for (var i = 0; i < playerCount; i++) {
-                var hand = [];
-
-                hand.push(kittenVm.difuses.pop());
-                hand = hand.concat(kittenVm.deck.splice(0, 4));
-
-                game.state.players.push(
-                    {
-                        "id": i,
-                        "name": "Player " + (i + 1),
-                        "isAlive": true,
-                        "hand": hand
-                    });
-
-                kittenVm.deck = _.difference(kittenVm.deck, game.state.players[i].hand);
-            }
-
-            kittenVm.deck = kittenVm.deck.concat(_.sample(kittenVm.bombs, (playerCount - 1)));
-
-            kittenVm.deck = _.shuffle(kittenVm.deck);
+            game.logic.dealCards(playerCount);
 
             kittenVm.players = game.state.players;
+            kittenVm.deck = game.state.deck;
         },
 
-        drawCard: function drawCard() {
-            var drawnCard = kittenVm.deck.pop();
+        drawCard: function drawCard(player) {
+            var drawnCard = game.state.deck.pop();
 
             if (drawnCard.title == "Exploding Kitten") {
-                kittenVm.killPlayer(kittenVm.players[kittenVm.currentPlayer]);
+                drawnCard.function(player);
+
+                return;
             }
 
             kittenVm.players[kittenVm.currentPlayer].hand.push(drawnCard);
@@ -91,6 +61,10 @@ var kittenVm = new Vue({
         killPlayer: function killPlayer(player) {
             player.isAlive = false;
 
+            kittenVm.checkWinCondition();
+        },
+
+        checkWinCondition: function checkWinCondition(){
             var playersRemaining = _.where(kittenVm.players, {isAlive: true});
 
             if (playersRemaining.length == 1) {
@@ -98,7 +72,7 @@ var kittenVm = new Vue({
                     {
                         "title": _.first(playersRemaining).name + " Wins",
                         "body": "",
-                        "class": "alert-success"
+                        "css": "alert-success"
                     });
             }
         },
@@ -129,24 +103,22 @@ var kittenVm = new Vue({
                 kittenVm.discard = selection.concat(kittenVm.discard);
                 kittenVm.players[kittenVm.currentPlayer].hand = _.difference(kittenVm.players[kittenVm.currentPlayer].hand, selection);
 
-                if (kittenVm.currentPlayer == kittenVm.numberOfPlayers - 1) {
-                    kittenVm.currentPlayer = 0;
-                } else {
-                    kittenVm.currentPlayer++;
-                }
+                // allow for nopes somewhere
+
+                var result = game.logic.logicEngine();
+
+                result.functionToCall();
             } else {
-                var alert = {
-                    "title": "Invalid move",
-                    "body": response.message,
-                    "class": "alert-danger"
-                };
-
-                kittenVm.alerts.push(alert);
-
-                setTimeout(function () {
-                    kittenVm.removeAlert(alert);
-                }, 3000);
+                kittenVm.alertWithTimeout(new game.Responses.AlertResponse("Invalid move", response.message, "alert-danger"));
             }
+        },
+
+        alertWithTimeout: function alertWithTimeout(alertResponse){
+            kittenVm.alerts.push(alertResponse);
+
+            setTimeout(function () {
+                kittenVm.removeAlert(alertResponse);
+            }, 3000);
         }
     }
 });

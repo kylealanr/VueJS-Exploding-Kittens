@@ -10,10 +10,63 @@ game.logic = (function gameLogicIife(global) {
 
         // public functions
         isValidMove: isValidMove,
-        logicEngine: logicEngine
+        logicEngine: logicEngine,
+        resetGameState: resetGameState,
+        dealCards: dealCards,
+        getNextLivingPlayer: getNextLivingPlayer
     };
 
-    return factory;
+    // internal variables
+    var normalCards;
+    var difuses;
+    var bombs;
+
+    function resetGameState() {
+        game.state.players =  [];
+        game.state.currentPlayer = -1;
+        game.state.deck = [];
+        game.state.discardPile = [];
+        game.state.alerts = [];
+    }
+
+    function createDeck() {
+        normalCards = _.shuffle(deck.normalCards.createCards());
+        difuses = deck.difuses.createCards();
+        bombs = deck.bombs.createCards();
+    }
+
+    function dealCards(playerCount) {
+        createDeck();
+
+        if (playerCount < 2 || playerCount > 5) {
+            kittenVm.alertWithTimeout(new game.Responses.AlertResponse("Invalid Player Count", "Player count must be between 2 and 5", "alert-danger"));
+            return null;
+        }
+
+        game.state.players = [];
+
+        for (var i = 0; i < playerCount; i++) {
+            var hand = [];
+
+            hand.push(difuses.pop());
+            hand = hand.concat(normalCards.splice(0, 4));
+
+            game.state.players.push(
+                {
+                    "id": i,
+                    "name": "Player " + (i + 1),
+                    "isAlive": true,
+                    "hand": hand
+                });
+
+            normalCards = _.difference(normalCards, game.state.players[i].hand);
+        }
+
+        game.state.deck = normalCards.concat(_.sample(bombs, (playerCount - 1)));
+        game.state.deck = game.state.deck.concat(difuses);
+
+        game.state.deck = _.shuffle(game.state.deck);
+    }
 
     function isValidMove() {
         /// <summary>
@@ -44,14 +97,14 @@ game.logic = (function gameLogicIife(global) {
 
                 break;
             case 3:
-                response = new game.Responses.ValidationResponse(true, "");
+                response = new game.Responses.ValidationRespnse(true, "");
 
                 var card1 = game.state.lastPlayedCards[0].title;
                 var card2 = game.state.lastPlayedCards[1].title;
                 var card3 = game.state.lastPlayedCards[2].title;
 
                 if (!game.utils.areEqual(card1, card2, card3)) {
-                    response = new game.ValidationRespnse(false, "Can only play three of the same card.");
+                    response = new game.Responses.ValidationRespnse(false, "Can only play three of the same card.");
                 }
 
                 break;
@@ -89,12 +142,15 @@ game.logic = (function gameLogicIife(global) {
                 response = new game.Responses.PlayerTurnResponse(getNextLivingPlayer(), cardsPlayed[0].next_player_turns, cardsPlayed[0].function);
                 break;
             case 2:
+                response = new game.Responses.PlayerTurnResponse(getNextLivingPlayer(), 0, stealRandomCard);
                 // steal random function in response
                 break;
             case 3:
+                response = new game.Responses.PlayerTurnResponse(getNextLivingPlayer(), 0, askToStealCard);
                 // go fish function in response
                 break;
             case 5:
+                response = new game.Responses.PlayerTurnResponse(getNextLivingPlayer(), 0, takeCardFromDiscard);
                 // pull from discard function in response
                 break;
             default:
@@ -108,19 +164,33 @@ game.logic = (function gameLogicIife(global) {
         /// <summary>
         /// Returns the index of the next living player
         /// </summary>
-        if (currentPlayer == (game.state.players.length - 1)) {
-            currentPlayer = 0;
+        if (game.state.currentPlayer == (game.state.players.length - 1)) {
+            game.state.currentPlayer = 0;
         } else {
-            currentPlayer++;
+            game.state.currentPlayer++;
         }
 
-        while (game.state.players[currentPlayer].isAlive == false) {
-            if (currentPlayer == (game.state.players.length - 1)) {
-                currentPlayer = 0;
+        while (game.state.players[game.state.currentPlayer].isAlive == false) {
+            if (game.state.currentPlayer == (game.state.players.length - 1)) {
+                game.state.currentPlayer = 0;
             } else {
-                currentPlayer++;
+                game.state.currentPlayer++;
             }
         }
     }
+
+    function stealRandomCard(){
+
+    }
+
+    function askToStealCard(){
+
+    }
+
+    function takeCardFromDiscard(){
+
+    }
+
+    return factory;
 
 })(window);
